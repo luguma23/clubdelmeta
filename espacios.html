@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Espacio - Club El Meta</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1><i class="fas fa-map-marker-alt"></i> Gestión de Espacios</h1>
+                </div>
+                <div class="auth-section">
+                    <div class="user-info">
+                        <span id="user-display">Usuario</span>
+                        <button onclick="logout()" class="auth-btn logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <nav class="admin-nav">
+                <a href="admin.html" class="nav-link"><i class="fas fa-arrow-left"></i> Volver al Panel</a>
+                <a href="espacios.html" class="nav-link active"><i class="fas fa-plus-circle"></i> Agregar Espacio</a>
+                <a href="editar-espacios.html" class="nav-link"><i class="fas fa-edit"></i> Editar Espacios</a>
+                <a href="ver-espacios.html" class="nav-link"><i class="fas fa-list"></i> Ver Espacios</a>
+            </nav>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-content">
+                <div class="page-header">
+                    <h2>Agregar Nuevo Espacio</h2>
+                    <p>Complete el formulario para registrar un nuevo espacio disponible para alquiler</p>
+                </div>
+
+                <form id="space-form" class="space-form">
+                    <div class="form-grid">
+                        <!-- Información Básica -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                            
+                            <div class="form-group">
+                                <label for="space-name">Nombre del Espacio *</label>
+                                <input type="text" id="space-name" required placeholder="Ej: Salón Principal">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="space-type">Tipo de Espacio *</label>
+                                    <select id="space-type" required>
+                                        <option value="">Seleccionar tipo</option>
+                                        <option value="salon">Salón de Eventos</option>
+                                        <option value="cancha">Cancha Deportiva</option>
+                                        <option value="piscina">Piscina</option>
+                                        <option value="quincho">Quincho/Parilla</option>
+                                        <option value="sala">Sala de Reuniones</option>
+                                        <option value="gimnasio">Gimnasio</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="space-category">Categoría *</label>
+                                    <select id="space-category" required>
+                                        <option value="">Seleccionar categoría</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="estandar">Estándar</option>
+                                        <option value="basico">Básico</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="space-capacity">Capacidad (número de personas)</label>
+                                <input type="number" id="space-capacity" min="1" placeholder="Ej: 50">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="space-description">Descripción del Espacio</label>
+                                <textarea id="space-description" rows="4" placeholder="Describa las características del espacio..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Imágenes del Espacio -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-images"></i> Imágenes del Espacio</h3>
+                            
+                            <div class="image-upload-section">
+                                <div class="upload-area" id="upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Arrastra imágenes aquí o haz clic para seleccionar</p>
+                                    <span>Formatos: JPG, PNG, GIF (Máx. 5MB por imagen)</span>
+                                    <input type="file" id="space-images" multiple accept="image/*" style="display: none;">
+                                </div>
+                                
+                                <div class="image-preview" id="image-preview">
+                                    <p class="no-images">No hay imágenes seleccionadas</p>
+                                </div>
+                                
+                                <div class="upload-actions">
+                                    <button type="button" class="btn-secondary" onclick="document.getElementById('space-images').click()">
+                                        <i class="fas fa-folder-open"></i> Seleccionar Imágenes
+                                    </button>
+                                    <button type="button" class="btn-secondary" onclick="clearImages()">
+                                        <i class="fas fa-trash"></i> Limpiar Todas
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarifas -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-dollar-sign"></i> Tarifas</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="space-tariff-normal">Tarifa Normal ($) *</label>
+                                    <input type="number" id="space-tariff-normal" min="0" step="0.01" placeholder="0.00" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="space-tariff-member">Tarifa Socio ($) *</label>
+                                    <input type="number" id="space-tariff-member" min="0" step="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="space-tariff-notes">Notas sobre Tarifas</label>
+                                <textarea id="space-tariff-notes" rows="2" placeholder="Información adicional sobre tarifas..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Guardar Espacio
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="admin-footer">
+            <p>Corporación Club El Meta &copy; 2025 - Sistema de Gestión de Espacios</p>
+        </footer>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="gestion-de-espacios.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+@media (max-width: 768px) {
+    nav a { display: block; margin: 0.5rem 0; }
+    form { max-width: 100%; }
+}

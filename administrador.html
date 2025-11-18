@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Club El Meta</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1><i class="fas fa-tachometer-alt"></i> Panel de Administración</h1>
+                </div>
+                
+                <div id="auth-section" class="auth-section">
+                    <!-- Formulario de Login -->
+                    <div class="login-form" id="login-form">
+                        <input type="text" id="username" placeholder="Usuario" class="auth-input">
+                        <input type="password" id="password" placeholder="Contraseña" class="auth-input">
+                        <button id="login-btn" class="auth-btn">Iniciar Sesión</button>
+                    </div>
+                    
+                    <!-- Información del Usuario -->
+                    <div class="user-info" id="user-info" style="display: none;">
+                        <span id="user-display">Usuario</span>
+                        <span id="role-display" class="role-badge">Rol</span>
+                        <button id="logout-btn" class="auth-btn logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="admin-nav" id="admin-nav" style="display: none;">
+                <a href="espacios.html" class="nav-link">
+                    <i class="fas fa-map-marker-alt"></i> Gestión de Espacios
+                </a>
+                <a href="reservas.html" class="nav-link">
+                    <i class="fas fa-calendar-check"></i> Reservas
+                </a>
+                <a href="socios.html" class="nav-link">
+                    <i class="fas fa-users"></i> Socios
+                </a>
+                <a href="reportes.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i> Reportes
+                </a>
+            </nav>
+        </header>
+
+        <main class="admin-main">
+            <!-- Mensaje de Login Requerido -->
+            <div id="login-prompt" class="login-prompt">
+                <div class="prompt-content">
+                    <i class="fas fa-lock"></i>
+                    <h2>Acceso al Sistema</h2>
+                    <p>Por favor, inicia sesión para acceder al panel de administración</p>
+                    <div class="demo-credentials">
+                        <h4>Credenciales de Demo:</h4>
+                        <p><strong>Administrador:</strong> admin / admin123</p>
+                        <p><strong>Asistente:</strong> asistente / asistente123</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido del Dashboard -->
+            <div id="admin-content" class="admin-content" style="display: none;">
+                <div class="welcome-section">
+                    <h2 id="welcome-message">Bienvenido al Panel de Administración</h2>
+                    <p>Gestiona los espacios, reservas, socios y genera reportes desde este panel centralizado</p>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <a href="espacios.html" class="card-link">
+                        <div class="card">
+                            <div class="card-icon spaces">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Gestión de Espacios</h3>
+                                <p>Administrar espacios disponibles</p>
+                                <span class="card-action">Acceder <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="reservas.html" class="card-link">
+                        <div class="card">
+                            <div class="card-icon reservations">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Gestión de Reservas</h3>
+                                <p>Controlar reservas y solicitudes</p>
+                                <span class="card-action">Acceder <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="socios.html" class="card-link">
+                        <div class="card">
+                            <div class="card-icon members">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Gestión de Socios</h3>
+                                <p>Administrar información de socios</p>
+                                <span class="card-action">Acceder <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <a href="reportes.html" class="card-link">
+                        <div class="card">
+                            <div class="card-icon reports">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Reportes y Estadísticas</h3>
+                                <p>Generar reportes del sistema</p>
+                                <span class="card-action">Acceder <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <span class="stat-number" id="stats-spaces">0</span>
+                            <span class="stat-label">Espacios Activos</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <span class="stat-number" id="stats-pending">0</span>
+                            <span class="stat-label">Reservas Pendientes</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <span class="stat-number" id="stats-members">0</span>
+                            <span class="stat-label">Socios Registrados</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="admin-footer">
+            <p>Corporación Club El Meta &copy; 2023 - Sistema de Gestión Integral</p>
+        </footer>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

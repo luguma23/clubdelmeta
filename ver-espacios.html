@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Espacios - Club El Meta</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1><i class="fas fa-map-marker-alt"></i> Gestión de Espacios</h1>
+                </div>
+                <div class="auth-section">
+                    <div class="user-info">
+                        <span id="user-display">Usuario</span>
+                        <button onclick="logout()" class="auth-btn logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <nav class="admin-nav">
+                <a href="admin.html" class="nav-link"><i class="fas fa-arrow-left"></i> Volver al Panel</a>
+                <a href="espacios.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar Espacio</a>
+                <a href="editar-espacios.html" class="nav-link"><i class="fas fa-edit"></i> Editar Espacios</a>
+                <a href="ver-espacios.html" class="nav-link active"><i class="fas fa-list"></i> Ver Espacios</a>
+            </nav>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-content">
+                <div class="page-header">
+                    <h2>Espacios Registrados</h2>
+                    <p>Lista completa de todos los espacios disponibles para alquiler</p>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-box">
+                        <input type="text" id="search-view-spaces" placeholder="Buscar espacios por nombre o tipo...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="stats-section">
+                        <div class="stat-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <span class="stat-number" id="total-spaces">0</span>
+                                <span class="stat-label">Espacios Totales</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <span class="stat-number" id="premium-spaces">0</span>
+                                <span class="stat-label">Premium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spaces-container">
+                    <div id="view-spaces-list" class="spaces-grid">
+                        <!-- Los espacios se cargarán aquí dinámicamente -->
+                    </div>
+                    <div id="no-spaces-view" class="no-data">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>No hay espacios registrados</h3>
+                        <p>Comienza agregando tu primer espacio</p>
+                        <a href="espacios.html" class="btn-primary">
+                            <i class="fas fa-plus"></i> Agregar Primer Espacio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="admin-footer">
+            <p>Corporación Club El Meta &copy; 2023 - Sistema de Gestión de Espacios</p>
+        </footer>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="gestion-de-espacios.js"></script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club El Meta - Espacios para Eventos y Deportes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="public-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <h1>
+                    <i class="fas fa-landmark"></i>
+                    Corporación Club El Meta
+                </h1>
+                <p class="tagline">Tu espacio ideal para eventos y deportes</p>
+            </div>
+            <nav class="public-nav">
+                <a href="#inicio" class="nav-link active">Inicio</a>
+                <a href="#espacios" class="nav-link">Espacios</a>
+                <a href="#cotizacion" class="nav-link">Cotización</a>
+                <a href="#reservas" class="nav-link">Reservas</a>
+                <a href="#servicios" class="nav-link">Servicios</a>
+                <a href="administrador.html" class="nav-link admin-link">
+                    <i class="fas fa-user-shield"></i> Admin
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section">
+        <div class="hero-content">
+            <h2>Bienvenidos al Club El Meta</h2>
+            <p>Descubre nuestros exclusivos espacios para eventos sociales, deportivos y empresariales</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" id="total-spaces-count">0</span>
+                    <span class="stat-label">Espacios Disponibles</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Eventos Realizados</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">5★</span>
+                    <span class="stat-label">Calificación</span>
+                </div>
+            </div>
+            <a href="#cotizacion" class="cta-button">
+                <i class="fas fa-calculator"></i> Solicitar Cotización
+            </a>
+        </div>
+    </section>
+
+    <!-- Sección de Espacios -->
+    <section id="espacios" class="spaces-section">
+        <div class="container">
+            <h2>Nuestros Espacios</h2>
+            <p class="section-subtitle">Descubre nuestras instalaciones de primera categoría</p>
+            
+            <div class="spaces-grid" id="public-spaces-grid">
+                <!-- Los espacios se cargarán dinámicamente aquí -->
+            </div>
+            
+            <div id="no-spaces-public" class="no-data-public">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Próximamente nuevos espacios</h3>
+                <p>Estamos preparando nuestras instalaciones para ti</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Cotización -->
+    <section id="cotizacion" class="quote-section">
+        <div class="container">
+            <h2>Cotización Instantánea</h2>
+            <p class="section-subtitle">Obtén una cotización automática en segundos</p>
+            
+            <div class="quote-container">
+                <div class="quote-form">
+                    <form id="quote-form">
+                        <div class="form-group">
+                            <label for="quote-space">
+                                <i class="fas fa-map-marker-alt"></i> Selecciona un Espacio
+                            </label>
+                            <select id="quote-space" required>
+                                <option value="">Selecciona un espacio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quote-date">
+                                    <i class="fas fa-calendar"></i> Fecha del Evento
+                                </label>
+                                <input type="date" id="quote-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quote-hours">
+                                    <i class="fas fa-clock"></i> Horas de Uso
+                                </label>
+                                <select id="quote-hours" required>
+                                    <option value="">Selecciona horas</option>
+                                    <option value="2">2 horas</option>
+                                    <option value="4">4 horas</option>
+                                    <option value="6">6 horas</option>
+                                    <option value="8">8 horas</option>
+                                    <option value="10">10+ horas</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="quote-member">
+                                <span class="checkmark"></span>
+                                <i class="fas fa-user-check"></i> Soy socio del club
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-calculator"></i> Calcular Cotización
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="quote-result">
+                    <div class="quote-card">
+                        <h3><i class="fas fa-receipt"></i> Tu Cotización</h3>
+                        <div id="quote-display" class="quote-display">
+                            <div class="quote-placeholder">
+                                <i class="fas fa-calculator"></i>
+                                <p>Completa el formulario para ver tu cotización</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Reservas -->
+    <section id="reservas" class="reservation-section">
+        <div class="container">
+            <h2>Realizar Reserva</h2>
+            <p class="section-subtitle">Confirma tu espacio con nosotros</p>
+            
+            <div class="reservation-container">
+                <form id="reservation-form" class="reservation-form">
+                    <div class="form-section">
+                        <h3><i class="fas fa-info-circle"></i> Información del Evento</h3>
+                        
+                        <div class="form-group">
+                            <label for="reserve-space">Espacio a Reservar *</label>
+                            <select id="reserve-space" required>
+                                <option value="">Selecciona un espacio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reserve-date">Fecha *</label>
+                                <input type="date" id="reserve-date" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="reserve-start">Hora Inicio *</label>
+                                    <input type="time" id="reserve-start" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reserve-end">Hora Fin *</label>
+                                    <input type="time" id="reserve-end" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reserve-type">Tipo de Evento</label>
+                            <select id="reserve-type">
+                                <option value="">Selecciona tipo de evento</option>
+                                <option value="social">Evento Social</option>
+                                <option value="empresarial">Evento Empresarial</option>
+                                <option value="deportivo">Evento Deportivo</option>
+                                <option value="familiar">Evento Familiar</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Información Personal</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reserve-name">Nombre Completo *</label>
+                                <input type="text" id="reserve-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reserve-phone">Teléfono *</label>
+                                <input type="tel" id="reserve-phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reserve-email">Correo Electrónico *</label>
+                            <input type="email" id="reserve-email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="reserve-member">
+                                <span class="checkmark"></span>
+                                Soy socio del club (aplica descuentos especiales)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3><i class="fas fa-sticky-note"></i> Información Adicional</h3>
+                        
+                        <div class="form-group">
+                            <label for="reserve-guests">Número Aproximado de Invitados</label>
+                            <input type="number" id="reserve-guests" min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reserve-notes">Notas Adicionales</label>
+                            <textarea id="reserve-notes" rows="4" placeholder="Información adicional sobre tu evento..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Enviar Solicitud de Reserva
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="resetReservationForm()">
+                            <i class="fas fa-times"></i> Limpiar Formulario
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios" class="menu-section">
+        <div class="container">
+            <h2>Servicios Adicionales</h2>
+            <p class="section-subtitle">Completa tu experiencia con nuestros servicios premium</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Catering</h3>
+                    <p>Servicio de alimentación para todos tus eventos con menús personalizados</p>
+                    <ul class="service-features">
+                        <li>Buffet y platos servidos</li>
+                        <li>Opción vegetariana disponible</li>
+                        <li>Cocteles de bienvenida</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Sonido e Iluminación</h3>
+                    <p>Sistemas profesionales de audio e iluminación para tu evento</p>
+                    <ul class="service-features">
+                        <li>Sistema de sonido profesional</li>
+                        <li>Iluminación ambiental</li>
+                        <li>Pista de baile iluminada</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <h3>Mobiliario</h3>
+                    <p>Amplia variedad de mobiliario para adaptarnos a tu evento</p>
+                    <ul class="service-features">
+                        <li>Mesas y sillas elegantes</li>
+                        <li>Mobiliario para exteriores</li>
+                        <li>Variedad de estilos disponibles</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Seguridad</h3>
+                    <p>Servicio de seguridad profesional para tu tranquilidad</p>
+                    <ul class="service-features">
+                        <li>Personal de seguridad</li>
+                        <li>Control de acceso</li>
+                        <li>Vigilancia 24/7</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="public-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Club El Meta</h3>
+                <p>Tu mejor opción para eventos y actividades deportivas. Calidad y servicio desde 1990.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal #123, Meta</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@clubelmeta.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Horarios</h3>
+                <div class="schedule-info">
+                    <p>Lunes - Viernes: 6:00 AM - 10:00 PM</p>
+                    <p>Sábados: 7:00 AM - 11:00 PM</p>
+                    <p>Domingos: 7:00 AM - 9:00 PM</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 Corporación Club El Meta. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="public-portal.js"></script>
+</body>
+</html>
