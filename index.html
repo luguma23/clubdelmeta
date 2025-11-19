@@ -74,7 +74,7 @@
         </div>
     </section>
 
-    <!-- Sección de Cotización -->
+    <!-- Sección de Cotización - MODIFICADA CON SELECT -->
     <section id="cotizacion" class="quote-section">
         <div class="container">
             <h2>Cotización Instantánea</h2>
@@ -114,11 +114,88 @@
                             </div>
                         </div>
                         
+                        <!-- NUEVO: Campo para número de personas -->
+                        <div class="form-group">
+                            <label for="quote-guests">
+                                <i class="fas fa-users"></i> Número de Invitados
+                            </label>
+                            <input type="number" id="quote-guests" min="1" max="1000" required>
+                        </div>
+                        
+                        <!-- NUEVO: Servicios Adicionales con SELECT -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-concierge-bell"></i> Servicios Adicionales</h3>
+                            
+                            <!-- Sillas -->
+                            <div class="form-group">
+                                <label for="quote-chairs">
+                                    <i class="fas fa-chair"></i> Sillas
+                                </label>
+                                <select id="quote-chairs" class="service-select">
+                                    <option value="none">No necesito sillas</option>
+                                    <option value="rimax" data-price="800">Sillas Rimax - $800 c/u</option>
+                                    <option value="tifany" data-price="5000">Sillas Tiffany - $5,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="quote-chairs-quantity" style="display: none;">
+                                    <label>Cantidad de sillas:</label>
+                                    <input type="number" id="quote-chairs-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Mesas -->
+                            <div class="form-group">
+                                <label for="quote-tables">
+                                    <i class="fas fa-table"></i> Mesas
+                                </label>
+                                <select id="quote-tables" class="service-select">
+                                    <option value="none">No necesito mesas</option>
+                                    <option value="standard" data-price="6000">Mesas Standard - $6,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="quote-tables-quantity" style="display: none;">
+                                    <label>Cantidad de mesas:</label>
+                                    <input type="number" id="quote-tables-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Mantelería -->
+                            <div class="form-group">
+                                <label for="quote-linens">
+                                    <i class="fas fa-rug"></i> Mantelería
+                                </label>
+                                <select id="quote-linens" class="service-select">
+                                    <option value="none">No necesito mantelería</option>
+                                    <option value="forros" data-price="2500">Forros para sillas - $2,500 c/u</option>
+                                    <option value="manteleria" data-price="10000">Mantelería completa - $10,000 por mesa</option>
+                                    <option value="cubremantel" data-price="6000">Cubre mantel - $6,000 por mesa</option>
+                                </select>
+                                <div class="quantity-selector" id="quote-linens-quantity" style="display: none;">
+                                    <label>Cantidad:</label>
+                                    <input type="number" id="quote-linens-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Meseros -->
+                            <div class="form-group">
+                                <label for="quote-waiters">
+                                    <i class="fas fa-user-tie"></i> Meseros
+                                </label>
+                                <select id="quote-waiters" class="service-select">
+                                    <option value="none">No necesito meseros</option>
+                                    <option value="solicitar" data-price="130000">Solicitar meseros - $130,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="quote-waiters-quantity" style="display: none;">
+                                    <label>Cantidad de meseros:</label>
+                                    <input type="number" id="quote-waiters-count" min="1" value="1" readonly>
+                                    <small class="helper-text">Calculado automáticamente según número de invitados</small>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="quote-member">
                                 <span class="checkmark"></span>
-                                <i class="fas fa-user-check"></i> Soy socio del club
+                                <i class="fas fa-user-check"></i> Soy socio del club (10% de descuento)
                             </label>
                         </div>
                         
@@ -143,7 +220,7 @@
         </div>
     </section>
 
-    <!-- Sección de Reservas -->
+    <!-- Sección de Reservas - MODIFICADA CON SELECT -->
     <section id="reservas" class="reservation-section">
         <div class="container">
             <h2>Realizar Reserva</h2>
@@ -191,6 +268,118 @@
                         </div>
                     </div>
                     
+                    <!-- NUEVA SECCIÓN: Servicios Adicionales con SELECT -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-concierge-bell"></i> Servicios Adicionales</h3>
+                        
+                        <div class="form-group">
+                            <label for="reserve-guests">Número de Invitados *</label>
+                            <input type="number" id="reserve-guests" min="1" max="1000" required>
+                            <small class="helper-text">Te sugeriremos las cantidades necesarias según el número de invitados</small>
+                        </div>
+                        
+                        <div class="suggested-quantities" id="suggested-quantities" style="display: none;">
+                            <h4>Cantidades Sugeridas:</h4>
+                            <div class="suggestions-grid">
+                                <div class="suggestion-item">
+                                    <span>Sillas necesarias:</span>
+                                    <strong id="suggested-chairs">0</strong>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span>Mesas necesarias:</span>
+                                    <strong id="suggested-tables">0</strong>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span>Manteles necesarios:</span>
+                                    <strong id="suggested-tablecloths">0</strong>
+                                </div>
+                                <div class="suggestion-item">
+                                    <span>Meseros sugeridos:</span>
+                                    <strong id="suggested-waiters">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="services-grid">
+                            <h4>Selecciona los servicios que necesitas:</h4>
+                            
+                            <!-- Sillas -->
+                            <div class="form-group">
+                                <label for="reserve-chairs">
+                                    <i class="fas fa-chair"></i> Sillas
+                                </label>
+                                <select id="reserve-chairs" class="service-select">
+                                    <option value="none">No necesito sillas</option>
+                                    <option value="rimax" data-price="800">Sillas Rimax - $800 c/u</option>
+                                    <option value="tifany" data-price="5000">Sillas Tiffany - $5,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="reserve-chairs-quantity" style="display: none;">
+                                    <label>Cantidad de sillas:</label>
+                                    <input type="number" id="reserve-chairs-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Mesas -->
+                            <div class="form-group">
+                                <label for="reserve-tables">
+                                    <i class="fas fa-table"></i> Mesas
+                                </label>
+                                <select id="reserve-tables" class="service-select">
+                                    <option value="none">No necesito mesas</option>
+                                    <option value="standard" data-price="6000">Mesas Standard - $6,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="reserve-tables-quantity" style="display: none;">
+                                    <label>Cantidad de mesas:</label>
+                                    <input type="number" id="reserve-tables-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Mantelería -->
+                            <div class="form-group">
+                                <label for="reserve-linens">
+                                    <i class="fas fa-rug"></i> Mantelería
+                                </label>
+                                <select id="reserve-linens" class="service-select">
+                                    <option value="none">No necesito mantelería</option>
+                                    <option value="forros" data-price="2500">Forros para sillas - $2,500 c/u</option>
+                                    <option value="manteleria" data-price="10000">Mantelería completa - $10,000 por mesa</option>
+                                    <option value="cubremantel" data-price="6000">Cubre mantel - $6,000 por mesa</option>
+                                </select>
+                                <div class="quantity-selector" id="reserve-linens-quantity" style="display: none;">
+                                    <label>Cantidad:</label>
+                                    <input type="number" id="reserve-linens-count" min="1" value="1">
+                                </div>
+                            </div>
+                            
+                            <!-- Meseros -->
+                            <div class="form-group">
+                                <label for="reserve-waiters">
+                                    <i class="fas fa-user-tie"></i> Meseros
+                                </label>
+                                <select id="reserve-waiters" class="service-select">
+                                    <option value="none">No necesito meseros</option>
+                                    <option value="solicitar" data-price="130000">Solicitar meseros - $130,000 c/u</option>
+                                </select>
+                                <div class="quantity-selector" id="reserve-waiters-quantity" style="display: none;">
+                                    <label>Cantidad de meseros:</label>
+                                    <input type="number" id="reserve-waiters-count" min="1" value="1" readonly>
+                                    <small class="helper-text">Calculado automáticamente según número de invitados</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resumen de Servicios Adicionales -->
+                        <div class="services-summary" id="services-summary" style="display: none;">
+                            <h4><i class="fas fa-receipt"></i> Resumen de Servicios Adicionales</h4>
+                            <div class="summary-items" id="summary-items">
+                                <!-- Los items se generarán dinámicamente -->
+                            </div>
+                            <div class="summary-total">
+                                <strong>Total Servicios Adicionales: $<span id="services-total">0</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-section">
                         <h3><i class="fas fa-user"></i> Información Personal</h3>
                         
@@ -214,22 +403,8 @@
                             <label class="checkbox-label">
                                 <input type="checkbox" id="reserve-member">
                                 <span class="checkmark"></span>
-                                Soy socio del club (aplica descuentos especiales)
+                                Soy socio del club (10% de descuento)
                             </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3><i class="fas fa-sticky-note"></i> Información Adicional</h3>
-                        
-                        <div class="form-group">
-                            <label for="reserve-guests">Número Aproximado de Invitados</label>
-                            <input type="number" id="reserve-guests" min="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="reserve-notes">Notas Adicionales</label>
-                            <textarea id="reserve-notes" rows="4" placeholder="Información adicional sobre tu evento..."></textarea>
                         </div>
                     </div>
                     

@@ -24,6 +24,11 @@ function initializeSpaces() {
     } else if (currentPage === 'ver-espacios.html') {
         setupViewPage();
     }
+    
+    // Configurar servicios adicionales si estamos en la página pública
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+        setupPublicServices();
+    }
 }
 
 function displayUserInfo() {
@@ -74,7 +79,644 @@ function setupViewPage() {
     loadStats();
 }
 
-// Funciones para Agregar Espacio
+// Configurar servicios públicos
+function setupPublicServices() {
+    // Configurar eventos para cotización
+    setupQuoteServices();
+    
+    // Configurar eventos para reservas
+    setupReservationServices();
+    
+    // Cargar espacios en el portal público
+    loadPublicSpaces();
+}
+
+// Funciones para servicios públicos
+function setupQuoteServices() {
+    // Sillas
+    document.querySelectorAll('input[name="quote-chairs"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById('quote-chairs-quantity');
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateQuote();
+        });
+    });
+    
+    // Mesas
+    document.querySelectorAll('input[name="quote-tables"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById('quote-tables-quantity');
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateQuote();
+        });
+    });
+    
+    // Mantelería
+    document.querySelectorAll('input[name="quote-linens"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById('quote-linens-quantity');
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateQuote();
+        });
+    });
+    
+    // Meseros
+    document.querySelectorAll('input[name="quote-waiters"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById('quote-waiters-quantity');
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+                updateWaitersCount('quote');
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateQuote();
+        });
+    });
+    
+    // Cantidades
+    const chairsCount = document.getElementById('quote-chairs-count');
+    const tablesCount = document.getElementById('quote-tables-count');
+    const linensCount = document.getElementById('quote-linens-count');
+    
+    if (chairsCount) chairsCount.addEventListener('input', calculateQuote);
+    if (tablesCount) tablesCount.addEventListener('input', calculateQuote);
+    if (linensCount) linensCount.addEventListener('input', calculateQuote);
+    
+    // Invitados
+    const quoteGuests = document.getElementById('quote-guests');
+    if (quoteGuests) {
+        quoteGuests.addEventListener('input', function() {
+            updateWaitersCount('quote');
+            calculateQuote();
+        });
+    }
+    
+    // Socio
+    const quoteMember = document.getElementById('quote-member');
+    if (quoteMember) {
+        quoteMember.addEventListener('change', calculateQuote);
+    }
+    
+    // Formulario de cotización
+    const quoteForm = document.getElementById('quote-form');
+    if (quoteForm) {
+        quoteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateQuote();
+        });
+    }
+}
+
+function setupReservationServices() {
+    // Invitados
+    const reserveGuests = document.getElementById('reserve-guests');
+    if (reserveGuests) {
+        reserveGuests.addEventListener('input', function() {
+            updateSuggestedQuantities();
+            updateWaitersCount('reserve');
+            calculateReservationTotal();
+        });
+    }
+    
+    // Meseros
+    document.querySelectorAll('input[name="waiters"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById('waiters-quantity');
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+                updateWaitersCount('reserve');
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateReservationTotal();
+        });
+    });
+    
+    // Configurar eventos para servicios adicionales en reservas
+    setupServiceOptions('chairs');
+    setupServiceOptions('tables');
+    setupServiceOptions('linens');
+    setupServiceOptions('waiters');
+    
+    // Formulario de reserva
+    const reservationForm = document.getElementById('reservation-form');
+    if (reservationForm) {
+        reservationForm.addEventListener('submit', handleReservationSubmit);
+    }
+}
+
+function setupServiceOptions(serviceType) {
+    document.querySelectorAll(`input[name="${serviceType}"]`).forEach(radio => {
+        radio.addEventListener('change', function() {
+            const quantityDiv = document.getElementById(`${serviceType}-quantity`);
+            if (this.value !== 'none') {
+                quantityDiv.style.display = 'block';
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+            calculateReservationTotal();
+        });
+    });
+    
+    const countInput = document.getElementById(`${serviceType}-count`);
+    if (countInput) {
+        countInput.addEventListener('input', calculateReservationTotal);
+    }
+}
+
+function updateWaitersCount(type) {
+    const guestsInput = document.getElementById(`${type}-guests`);
+    const waitersCountInput = document.getElementById(`${type}-waiters-count`);
+    
+    if (guestsInput && waitersCountInput) {
+        const guests = parseInt(guestsInput.value) || 0;
+        const waitersCount = Math.ceil(guests / 24);
+        waitersCountInput.value = waitersCount;
+    }
+}
+
+function updateSuggestedQuantities() {
+    const guests = parseInt(document.getElementById('reserve-guests').value) || 0;
+    const suggestedQuantities = document.getElementById('suggested-quantities');
+    
+    if (guests > 0) {
+        suggestedQuantities.style.display = 'block';
+        document.getElementById('suggested-chairs').textContent = guests;
+        document.getElementById('suggested-tables').textContent = Math.ceil(guests / 4);
+        document.getElementById('suggested-tablecloths').textContent = Math.ceil(guests / 4);
+        document.getElementById('suggested-waiters').textContent = Math.ceil(guests / 24);
+    } else {
+        suggestedQuantities.style.display = 'none';
+    }
+}
+
+function calculateQuote() {
+    const spaceSelect = document.getElementById('quote-space');
+    const hoursSelect = document.getElementById('quote-hours');
+    const guestsInput = document.getElementById('quote-guests');
+    const isMember = document.getElementById('quote-member').checked;
+    
+    if (!spaceSelect.value || !hoursSelect.value || !guestsInput.value) {
+        return;
+    }
+    
+    const spaces = getData('spaces') || [];
+    const selectedSpace = spaces.find(s => s.id === parseInt(spaceSelect.value));
+    
+    if (!selectedSpace) {
+        return;
+    }
+    
+    let total = 0;
+    const details = [];
+    
+    // Costo base del espacio
+    const spaceCost = selectedSpace.tariffNormal * parseInt(hoursSelect.value);
+    total += spaceCost;
+    details.push({
+        name: `${selectedSpace.name} (${hoursSelect.value} horas)`,
+        amount: spaceCost
+    });
+    
+    // Servicios adicionales
+    const servicesTotal = calculateServicesTotal('quote');
+    total += servicesTotal;
+    
+    // Aplicar descuento de socio
+    if (isMember) {
+        const discount = total * 0.1;
+        details.push({
+            name: 'Descuento Socio (10%)',
+            amount: -discount
+        });
+        total -= discount;
+    }
+    
+    // Mostrar resultado
+    displayQuoteResult(details, total);
+}
+
+function calculateReservationTotal() {
+    const servicesTotal = calculateServicesTotal('reserve');
+    const servicesSummary = document.getElementById('services-summary');
+    const servicesTotalElement = document.getElementById('services-total');
+    
+    if (servicesTotal > 0) {
+        servicesSummary.style.display = 'block';
+        servicesTotalElement.textContent = servicesTotal.toLocaleString();
+        
+        // Actualizar items del resumen
+        updateServicesSummary();
+    } else {
+        servicesSummary.style.display = 'none';
+    }
+}
+
+function calculateServicesTotal(prefix) {
+    let total = 0;
+    
+    // Sillas
+    const chairsRadio = document.querySelector(`input[name="${prefix}-chairs"]:checked`);
+    if (chairsRadio && chairsRadio.value !== 'none') {
+        const chairsCount = parseInt(document.getElementById(`${prefix}-chairs-count`).value) || 0;
+        const chairPrice = getServicePrice(chairsRadio.value, 'chairs');
+        total += chairsCount * chairPrice;
+    }
+    
+    // Mesas
+    const tablesRadio = document.querySelector(`input[name="${prefix}-tables"]:checked`);
+    if (tablesRadio && tablesRadio.value !== 'none') {
+        const tablesCount = parseInt(document.getElementById(`${prefix}-tables-count`).value) || 0;
+        const tablePrice = getServicePrice(tablesRadio.value, 'tables');
+        total += tablesCount * tablePrice;
+    }
+    
+    // Mantelería
+    const linensRadio = document.querySelector(`input[name="${prefix}-linens"]:checked`);
+    if (linensRadio && linensRadio.value !== 'none') {
+        const linensCount = parseInt(document.getElementById(`${prefix}-linens-count`).value) || 0;
+        const linenPrice = getServicePrice(linensRadio.value, 'linens');
+        total += linensCount * linenPrice;
+    }
+    
+    // Meseros
+    const waitersRadio = document.querySelector(`input[name="${prefix}-waiters"]:checked`);
+    if (waitersRadio && waitersRadio.value !== 'none') {
+        const waitersCount = parseInt(document.getElementById(`${prefix}-waiters-count`).value) || 0;
+        const waiterPrice = getServicePrice(waitersRadio.value, 'waiters');
+        total += waitersCount * waiterPrice;
+    }
+    
+    return total;
+}
+
+function getServicePrice(serviceType, category) {
+    const prices = {
+        'chairs': {
+            'rimax': 800,
+            'tifany': 5000
+        },
+        'tables': {
+            'standard': 6000
+        },
+        'linens': {
+            'forros': 2500,
+            'manteleria': 10000,
+            'cubremantel': 6000
+        },
+        'waiters': {
+            'solicitar': 130000
+        }
+    };
+    
+    return prices[category]?.[serviceType] || 0;
+}
+
+function updateServicesSummary() {
+    const summaryItems = document.getElementById('summary-items');
+    let html = '';
+    
+    // Sillas
+    const chairsRadio = document.querySelector('input[name="chairs"]:checked');
+    if (chairsRadio && chairsRadio.value !== 'none') {
+        const chairsCount = parseInt(document.getElementById('chairs-count').value) || 0;
+        const chairPrice = getServicePrice(chairsRadio.value, 'chairs');
+        html += `
+            <div class="summary-item">
+                <span>Sillas ${chairsRadio.value === 'rimax' ? 'Rimax' : 'Tiffany'} (${chairsCount})</span>
+                <span>$${(chairsCount * chairPrice).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    // Mesas
+    const tablesRadio = document.querySelector('input[name="tables"]:checked');
+    if (tablesRadio && tablesRadio.value !== 'none') {
+        const tablesCount = parseInt(document.getElementById('tables-count').value) || 0;
+        const tablePrice = getServicePrice(tablesRadio.value, 'tables');
+        html += `
+            <div class="summary-item">
+                <span>Mesas Standard (${tablesCount})</span>
+                <span>$${(tablesCount * tablePrice).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    // Mantelería
+    const linensRadio = document.querySelector('input[name="linens"]:checked');
+    if (linensRadio && linensRadio.value !== 'none') {
+        const linensCount = parseInt(document.getElementById('linens-count').value) || 0;
+        const linenPrice = getServicePrice(linensRadio.value, 'linens');
+        const serviceName = getLinenServiceName(linensRadio.value);
+        html += `
+            <div class="summary-item">
+                <span>${serviceName} (${linensCount})</span>
+                <span>$${(linensCount * linenPrice).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    // Meseros
+    const waitersRadio = document.querySelector('input[name="waiters"]:checked');
+    if (waitersRadio && waitersRadio.value !== 'none') {
+        const waitersCount = parseInt(document.getElementById('waiters-count').value) || 0;
+        const waiterPrice = getServicePrice(waitersRadio.value, 'waiters');
+        html += `
+            <div class="summary-item">
+                <span>Meseros (${waitersCount})</span>
+                <span>$${(waitersCount * waiterPrice).toLocaleString()}</span>
+            </div>
+        `;
+    }
+    
+    summaryItems.innerHTML = html;
+}
+
+function getLinenServiceName(type) {
+    const names = {
+        'forros': 'Forros para sillas',
+        'manteleria': 'Mantelería completa',
+        'cubremantel': 'Cubre mantel'
+    };
+    return names[type] || type;
+}
+
+function displayQuoteResult(details, total) {
+    const quoteDisplay = document.getElementById('quote-display');
+    let html = '<div class="quote-details">';
+    
+    details.forEach(item => {
+        html += `
+            <div class="quote-result-item">
+                <span>${item.name}</span>
+                <span>$${item.amount.toLocaleString()}</span>
+            </div>
+        `;
+    });
+    
+    html += `
+        <div class="quote-total">
+            <span>Total</span>
+            <span>$${total.toLocaleString()}</span>
+        </div>
+    </div>`;
+    
+    quoteDisplay.innerHTML = html;
+}
+
+function handleReservationSubmit(e) {
+    e.preventDefault();
+    
+    const reservationData = {
+        spaceId: document.getElementById('reserve-space').value,
+        date: document.getElementById('reserve-date').value,
+        startTime: document.getElementById('reserve-start').value,
+        endTime: document.getElementById('reserve-end').value,
+        eventType: document.getElementById('reserve-type').value,
+        guests: parseInt(document.getElementById('reserve-guests').value),
+        name: document.getElementById('reserve-name').value,
+        phone: document.getElementById('reserve-phone').value,
+        email: document.getElementById('reserve-email').value,
+        isMember: document.getElementById('reserve-member').checked,
+        services: getSelectedServices(),
+        createdAt: new Date().toISOString()
+    };
+    
+    if (validateReservation(reservationData)) {
+        saveReservation(reservationData);
+    }
+}
+
+function getSelectedServices() {
+    const services = {};
+    
+    // Sillas
+    const chairsRadio = document.querySelector('input[name="chairs"]:checked');
+    if (chairsRadio && chairsRadio.value !== 'none') {
+        services.chairs = {
+            type: chairsRadio.value,
+            quantity: parseInt(document.getElementById('chairs-count').value) || 0,
+            price: getServicePrice(chairsRadio.value, 'chairs')
+        };
+    }
+    
+    // Mesas
+    const tablesRadio = document.querySelector('input[name="tables"]:checked');
+    if (tablesRadio && tablesRadio.value !== 'none') {
+        services.tables = {
+            type: tablesRadio.value,
+            quantity: parseInt(document.getElementById('tables-count').value) || 0,
+            price: getServicePrice(tablesRadio.value, 'tables')
+        };
+    }
+    
+    // Mantelería
+    const linensRadio = document.querySelector('input[name="linens"]:checked');
+    if (linensRadio && linensRadio.value !== 'none') {
+        services.linens = {
+            type: linensRadio.value,
+            quantity: parseInt(document.getElementById('linens-count').value) || 0,
+            price: getServicePrice(linensRadio.value, 'linens')
+        };
+    }
+    
+    // Meseros
+    const waitersRadio = document.querySelector('input[name="waiters"]:checked');
+    if (waitersRadio && waitersRadio.value !== 'none') {
+        services.waiters = {
+            type: waitersRadio.value,
+            quantity: parseInt(document.getElementById('waiters-count').value) || 0,
+            price: getServicePrice(waitersRadio.value, 'waiters')
+        };
+    }
+    
+    return services;
+}
+
+function validateReservation(data) {
+    if (!data.spaceId) {
+        showMessage('Por favor selecciona un espacio', 'error');
+        return false;
+    }
+    
+    if (!data.date || !data.startTime || !data.endTime) {
+        showMessage('Por favor completa la fecha y hora del evento', 'error');
+        return false;
+    }
+    
+    if (!data.guests || data.guests < 1) {
+        showMessage('Por favor ingresa el número de invitados', 'error');
+        return false;
+    }
+    
+    if (!data.name || !data.phone || !data.email) {
+        showMessage('Por favor completa tu información personal', 'error');
+        return false;
+    }
+    
+    return true;
+}
+
+function saveReservation(reservationData) {
+    const reservations = getData('reservations') || [];
+    const newId = reservations.length > 0 ? Math.max(...reservations.map(r => r.id)) + 1 : 1;
+    
+    const newReservation = {
+        id: newId,
+        ...reservationData,
+        status: 'pending'
+    };
+    
+    reservations.push(newReservation);
+    
+    if (setData('reservations', reservations)) {
+        showMessage('Reserva enviada correctamente. Te contactaremos pronto.', 'success');
+        resetReservationForm();
+    } else {
+        showMessage('Error al enviar la reserva', 'error');
+    }
+}
+
+function resetReservationForm() {
+    const form = document.getElementById('reservation-form');
+    if (form) {
+        form.reset();
+        document.getElementById('suggested-quantities').style.display = 'none';
+        document.getElementById('services-summary').style.display = 'none';
+        
+        // Ocultar todos los selectores de cantidad
+        document.querySelectorAll('.quantity-selector').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // Resetear radios a "none"
+        document.querySelectorAll('input[value="none"]').forEach(radio => {
+            radio.checked = true;
+        });
+    }
+}
+
+// Cargar espacios en el portal público
+function loadPublicSpaces() {
+    const spaces = getData('spaces') || [];
+    const spacesGrid = document.getElementById('public-spaces-grid');
+    const noSpaces = document.getElementById('no-spaces-public');
+    const totalSpacesCount = document.getElementById('total-spaces-count');
+    const quoteSpaceSelect = document.getElementById('quote-space');
+    const reserveSpaceSelect = document.getElementById('reserve-space');
+    
+    if (totalSpacesCount) {
+        totalSpacesCount.textContent = spaces.length;
+    }
+    
+    if (spaces.length === 0) {
+        if (spacesGrid) spacesGrid.innerHTML = '';
+        if (noSpaces) noSpaces.style.display = 'block';
+        if (quoteSpaceSelect) quoteSpaceSelect.innerHTML = '<option value="">No hay espacios disponibles</option>';
+        if (reserveSpaceSelect) reserveSpaceSelect.innerHTML = '<option value="">No hay espacios disponibles</option>';
+        return;
+    }
+    
+    if (noSpaces) noSpaces.style.display = 'none';
+    
+    // Actualizar grid de espacios
+    if (spacesGrid) {
+        let spacesHTML = '';
+        spaces.forEach(space => {
+            spacesHTML += createPublicSpaceCard(space);
+        });
+        spacesGrid.innerHTML = spacesHTML;
+    }
+    
+    // Actualizar selects de espacios
+    if (quoteSpaceSelect) {
+        let optionsHTML = '<option value="">Selecciona un espacio</option>';
+        spaces.forEach(space => {
+            optionsHTML += `<option value="${space.id}">${space.name} - $${space.tariffNormal}/hora</option>`;
+        });
+        quoteSpaceSelect.innerHTML = optionsHTML;
+    }
+    
+    if (reserveSpaceSelect) {
+        let optionsHTML = '<option value="">Selecciona un espacio</option>';
+        spaces.forEach(space => {
+            optionsHTML += `<option value="${space.id}">${space.name}</option>`;
+        });
+        reserveSpaceSelect.innerHTML = optionsHTML;
+    }
+}
+
+function createPublicSpaceCard(space) {
+    const typeLabels = {
+        'salon': 'Salón de Eventos',
+        'cancha': 'Cancha Deportiva',
+        'piscina': 'Piscina',
+        'quincho': 'Quincho/Parilla',
+        'sala': 'Sala de Reuniones',
+        'gimnasio': 'Gimnasio',
+        'otro': 'Otro'
+    };
+    
+    return `
+        <div class="space-card-public">
+            <div class="space-image">
+                <i class="fas fa-${getSpaceIcon(space.type)}"></i>
+            </div>
+            <div class="space-content">
+                <h3 class="space-title">${space.name}</h3>
+                <span class="space-type">${typeLabels[space.type] || space.type}</span>
+                <p class="space-description">${space.description || 'Espacio perfecto para tu evento.'}</p>
+                
+                <div class="space-details">
+                    ${space.capacity ? `
+                    <div class="space-detail">
+                        <i class="fas fa-users"></i>
+                        <span>${space.capacity} personas</span>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="space-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>Por hora</span>
+                    </div>
+                </div>
+                
+                <div class="space-price">
+                    <div class="price-normal">$${space.tariffNormal}/hora</div>
+                    <div class="price-member">Socios: $${space.tariffMember}/hora</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function getSpaceIcon(type) {
+    const icons = {
+        'salon': 'building',
+        'cancha': 'futbol',
+        'piscina': 'swimming-pool',
+        'quincho': 'fire',
+        'sala': 'users',
+        'gimnasio': 'dumbbell',
+        'otro': 'map-marker-alt'
+    };
+    return icons[type] || 'map-marker-alt';
+}
+
+// Funciones para Agregar Espacio (mantenidas del código original)
 function setupImageUpload() {
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('space-images');
@@ -692,3 +1334,6 @@ window.resetForm = resetForm;
 window.logout = logout;
 window.editSpace = editSpace;
 window.deleteSpace = deleteSpace;
+window.resetReservationForm = resetReservationForm;
+window.calculateQuote = calculateQuote;
+window.calculateReservationTotal = calculateReservationTotal;
