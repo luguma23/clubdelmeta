@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="admin.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reportes y Estadísticas - Admin</title>
+
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Reportes</h1>
-        <nav><a href="admin.html">Volver</a></nav>
+  <div class="admin-container">
+    <header class="admin-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <h1><i class="fas fa-chart-line"></i> Reportes y Estadísticas</h1>
+        </div>
+        <div class="auth-section">
+          <div class="user-info">
+            <span id="user-display">Usuario</span>
+            <button id="logout-btn" class="auth-btn logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <a href="administrador.html" class="nav-link"><i class="fas fa-arrow-left"></i> Volver al Panel</a>
+        <a href="informes.html" class="nav-link active"><i class="fas fa-chart-bar"></i> Reportes</a>
+        <a href="reservas.html" class="nav-link"><i class="fas fa-calendar-check"></i> Reservas</a>
+        <a href="miembros.html" class="nav-link"><i class="fas fa-users"></i> Socios</a>
+      </nav>
     </header>
-    <main>
-        <button id="generate-report">Generar Reporte</button>
-        <div id="report-output"></div>
+
+    <main class="admin-main">
+      <div class="admin-content">
+        <div class="page-header">
+          <h2>Reportes</h2>
+          <p>Genera reportes rápidos del sistema y descárgalos</p>
+        </div>
+
+        <div class="form-section">
+          <div style="display:flex;gap:1rem;align-items:center;">
+            <button id="generate-report" class="btn-primary"><i class="fas fa-download"></i> Generar Reporte</button>
+            <button id="download-csv" class="btn-secondary"><i class="fas fa-file-csv"></i> Descargar CSV</button>
+          </div>
+        </div>
+
+        <div id="report-output" style="margin-top:1rem;"></div>
+      </div>
     </main>
-    <script src="main.js"></script>
-    <script src="reports.js"></script>
+
+    <footer class="admin-footer">
+      <p>Corporación Club El Meta &copy; 2025</p>
+    </footer>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="main.js"></script>
+  <script src="reports.js"></script>
 </body>
 </html>
