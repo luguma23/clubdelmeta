@@ -864,3 +864,126 @@ body {
         text-align: center;
     }
 }
+/* NAV SUPERIOR */
+.top-nav {
+    background: #1a3c7c;
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.tab {
+    color: white;
+    opacity: .8;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.tab.active {
+    opacity: 1;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+
+.logout-btn {
+    background: #c0392b;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* CONTENEDOR */
+.main-container {
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+/* TARJETAS */
+.white-card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+    margin-bottom: 30px;
+}
+
+.title-card {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.main-title {
+    font-size: 36px;
+    color: #1a3c7c;
+}
+
+.subtitle {
+    color: #555;
+}
+
+/* FORMULARIO */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* BOTÓN PRINCIPAL */
+.btn-primary {
+    background: #1a3c7c;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* TABLA */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.data-table th {
+    background: #1a3c7c;
+    color: white;
+    padding: 12px;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.data-table tr:hover {
+    background: #f0f4ff;
+}

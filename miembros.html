@@ -1,133 +1,103 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gestión de Socios - Admin</title>
-
-  <link rel="stylesheet" href="admin.css">
-  <link rel="stylesheet" href="estilos.css">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Socios</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-  <div class="admin-container">
-    <header class="admin-header">
-      <div class="header-content">
-        <div class="logo-section">
-          <h1><i class="fas fa-users"></i> Gestión de Socios</h1>
-        </div>
-        <div class="auth-section">
-          <div class="user-info">
-            <span id="user-display">Usuario</span>
-            <button id="logout-btn" class="auth-btn logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
-          </div>
-        </div>
-      </div>
 
-      <nav class="admin-nav">
-        <a href="administrador.html" class="nav-link"><i class="fas fa-arrow-left"></i> Volver al Panel</a>
-        <a href="miembros.html" class="nav-link active"><i class="fas fa-users"></i> Socios</a>
-        <a href="espacios.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Espacios</a>
-        <a href="informes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a>
-      </nav>
+<body>
+
+    <!-- NAV -->
+    <header class="top-nav">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Volver al Panel
+        </a>
+
+        <nav class="nav-tabs">
+            <a class="tab" href="reservas.html"><i class="fas fa-calendar"></i> Reservas</a>
+            <a class="tab active" href="miembros.html"><i class="fas fa-users"></i> Socios</a>
+            <a class="tab" href="informes.html"><i class="fas fa-chart-bar"></i> Reportes</a>
+        </nav>
+
+        <div class="user-info-nav">
+            Administrador General
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
     </header>
 
-    <main class="admin-main">
-      <div class="admin-content">
-        <div class="page-header">
-          <h2>Socios y Prospectos</h2>
-          <p>Agregar, aprobar y gestionar socios del club</p>
-        </div>
+    <!-- CONTENIDO -->
+    <main class="main-container">
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
-          <div class="form-section">
-            <h3>Registrar Socio</h3>
+        <!-- TÍTULO -->
+        <section class="title-card">
+            <h1 class="main-title">Gestión de Socios</h1>
+            <p class="subtitle">Registrar y administrar socios</p>
+        </section>
+
+        <!-- FORMULARIO -->
+        <section class="white-card">
+            <h2 class="section-title">Registrar Socio</h2>
+
             <form id="member-form">
-              <div class="form-group">
-                <label>Nombre</label>
-                <input type="text" id="member-name" required>
-              </div>
-              <div class="form-group">
-                <label>Correo</label>
-                <input type="email" id="member-email" required>
-              </div>
-              <div class="form-group">
-                <label>Teléfono</label>
-                <input type="tel" id="member-phone" required>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary">Registrar Socio</button>
-              </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text" id="member-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <input type="email" id="member-email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" id="member-phone" required>
+                    </div>
+                </div>
+
+                <button class="btn-primary" type="submit">
+                    <i class="fas fa-user-plus"></i> Registrar Socio
+                </button>
+
             </form>
-          </div>
+        </section>
 
-          <div class="form-section">
-            <h3>Registrar Prospecto</h3>
-            <form id="prospect-form">
-              <div class="form-group">
-                <label>Nombre</label>
-                <input type="text" id="prospect-name" required>
-              </div>
-              <div class="form-group">
-                <label>Correo</label>
-                <input type="email" id="prospect-email" required>
-              </div>
-              <div class="form-group">
-                <label>Teléfono</label>
-                <input type="tel" id="prospect-phone" required>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary">Agregar Prospecto</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <!-- TABLA -->
+        <section class="white-card">
+            <h2 class="section-title">
+                Socios Registrados — Total: <span id="total-members">0</span>
+            </h2>
 
-        <div style="margin-top:1.5rem;">
-          <div style="display:flex;gap:1rem;align-items:center;justify-content:space-between;">
-            <h3>Socios Registrados</h3>
-            <div>
-              <span>Total socios: <strong id="count-members">0</strong></span> &nbsp;|&nbsp;
-              <span>Total prospectos: <strong id="count-prospects">0</strong></span>
-            </div>
-          </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Código Descuento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
 
-          <table class="admin-table" id="members-table" style="width:100%; margin-top:0.5rem;">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+                <tbody id="members-list">
+                    <!-- Aquí se cargan los socios -->
+                </tbody>
 
-          <h3 style="margin-top:1.5rem;">Prospectos</h3>
-          <table class="admin-table" id="prospects-table" style="width:100%; margin-top:0.5rem;">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
+            </table>
+        </section>
+
     </main>
 
-    <footer class="admin-footer">
-      <p>Corporación Club El Meta &copy; 2025</p>
-    </footer>
-  </div>
+    <!-- Scripts necesarios -->
+    <script src="main.js"></script>
+    <script src="miembros.js"></script>
 
-  <script src="auth.js"></script>
-  <script src="main.js"></script>
-  <script src="miembros.js"></script>
 </body>
 </html>
