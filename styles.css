@@ -778,3 +778,74 @@ input:focus, select:focus, textarea:focus {
 .message.error {
     background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
+/* Estilos para el campo de código de socio */
+.member-code-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+#member-code {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#member-code:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+#member-code.valid {
+    border-color: #27ae60;
+    background-color: #f0fff4;
+}
+
+#member-code.invalid {
+    border-color: #e74c3c;
+    background-color: #fff5f5;
+}
+
+.btn-validate {
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-validate:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-validate:active {
+    transform: translateY(0);
+}
+
+#code-feedback {
+    display: block;
+    margin-top: 5px;
+    color: #7f8c8d;
+    font-size: 0.85em;
+}
+
+#code-feedback.valid {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+#code-feedback.invalid {
+    color: #e74c3c;
+    font-weight: 600;
+}

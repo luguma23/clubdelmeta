@@ -396,14 +396,31 @@
                             <input type="email" id="reserve-email" required>
                         </div>
                         
-                        <div class="form-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="reserve-member">
-                                <span class="checkmark"></span>
-                                Soy socio del club (10% de descuento)
-                            </label>
-                        </div>
-                    </div>
+                     <div class="form-group">
+    <label for="member-code">
+        <i class="fas fa-ticket-alt"></i> Código de Socio (10% de descuento)
+    </label>
+    <div class="member-code-container">
+        <input 
+            type="text" 
+            id="member-code" 
+            placeholder="Ej: CLUB-META-2025"
+            maxlength="20"
+        >
+        <button 
+            type="button" 
+            id="validate-code-btn" 
+            class="btn-validate"
+            onclick="validateMemberCode()"
+        >
+            <i class="fas fa-check"></i> Validar
+        </button>
+    </div>
+    <small class="helper-text" id="code-feedback">
+        Si eres socio, ingresa tu código único de descuento
+    </small>
+    <input type="hidden" id="is-member-valid" value="false">
+</div>
                     
                     <div class="form-actions">
                         <button type="submit" class="btn-primary">
@@ -505,7 +522,7 @@
             <div class="footer-section">
                 <h3>Horarios</h3>
                 <div class="schedule-info">
-                    <p>Lunes - Viernes: 6:00 AM - 10:00 PM</p>
+                    <p>Martes - Viernes: 6:00 AM - 10:00 PM</p>
                     <p>Sábados: 7:00 AM - 11:00 PM</p>
                     <p>Domingos: 7:00 AM - 9:00 PM</p>
                 </div>

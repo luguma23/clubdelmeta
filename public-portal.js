@@ -305,7 +305,6 @@ function setupReservationForm() {
 function calculateQuote() {
     const spaceSelect = document.getElementById('quote-space');
     const hoursSelect = document.getElementById('quote-hours');
-    const memberCheckbox = document.getElementById('quote-member');
     const guestsInput = document.getElementById('quote-guests');
     const dateInput = document.getElementById('quote-date');
     const quoteDisplay = document.getElementById('quote-display');
@@ -322,14 +321,14 @@ function calculateQuote() {
     const selectedOption = spaceSelect.options[spaceSelect.selectedIndex];
     const hoursValue = hoursSelect.value;
     
-    // Determinar horas según la opción seleccionada
+    // Determinar horas según la opción seleccionada - CAMBIO 3
     let hours = 0;
     let hoursText = '';
     if (hoursValue === "1") {
-        hours = 1;
+        hours = 4;  // CAMBIADO: de 1 a 4
         hoursText = "4 horas";
     } else if (hoursValue === "2") {
-        hours = 2;
+        hours = 8;  // CAMBIADO: de 2 a 8
         hoursText = "8 horas";
     }
     
@@ -348,7 +347,12 @@ function calculateQuote() {
     // Calcular costo base del espacio
     const normalRate = parseFloat(selectedOption.dataset.normal);
     const memberRate = parseFloat(selectedOption.dataset.member);
-    const isMember = memberCheckbox.checked;
+    
+    // CAMBIO 1: Validar si hay código de socio ingresado
+    const isMember = document.getElementById('quote-member-code') ? 
+                     document.getElementById('quote-member-code').value.trim().length > 0 : 
+                     false;
+    
     const spaceRate = isMember ? memberRate : normalRate;
     const spaceCost = spaceRate * hours;
     
@@ -664,7 +668,10 @@ function handleReservationSubmit(e) {
         name: document.getElementById('reserve-name').value,
         phone: document.getElementById('reserve-phone').value,
         email: document.getElementById('reserve-email').value,
-        isMember: document.getElementById('reserve-member').checked,
+        // CAMBIO 2: Validar si hay código de socio ingresado
+        isMember: document.getElementById('member-code') ? 
+                  document.getElementById('member-code').value.trim().length > 0 : 
+                  false,
         guests: parseInt(document.getElementById('reserve-guests').value) || 0,
         status: 'pending',
         createdAt: new Date().toISOString()
@@ -952,6 +959,50 @@ function setData(key, data) {
 window.resetReservationForm = resetReservationForm;
 window.calculateQuote = calculateQuote;
 window.validateDateSelection = validateDateSelection;
+
+// ========== CAMBIO 4: SISTEMA DE CÓDIGO DE SOCIO SIMPLIFICADO ==========
+const validMemberCodes = ['CLUB-META-2025', 'SOCIO-VIP-2024', 'EL-META-001'];
+
+function validateMemberCode(inputId, feedbackId) {
+    const codeInput = document.getElementById(inputId);
+    const feedbackElement = document.getElementById(feedbackId);
+    
+    if (!codeInput || !feedbackElement) return false;
+    
+    const enteredCode = codeInput.value.trim().toUpperCase();
+    const isValid = validMemberCodes.includes(enteredCode);
+    
+    if (enteredCode === '') {
+        codeInput.classList.remove('valid', 'invalid');
+        feedbackElement.textContent = 'Ingresa tu código para 10% de descuento';
+        feedbackElement.className = 'helper-text';
+        return false;
+    }
+    
+    if (isValid) {
+        codeInput.classList.remove('invalid');
+        codeInput.classList.add('valid');
+        feedbackElement.textContent = '✅ Código válido - 10% descuento aplicado';
+        feedbackElement.className = 'helper-text valid';
+        showPublicMessage('¡Código de socio validado!', 'success');
+    } else {
+        codeInput.classList.remove('valid');
+        codeInput.classList.add('invalid');
+        feedbackElement.textContent = '❌ Código inválido';
+        feedbackElement.className = 'helper-text invalid';
+        showPublicMessage('Código incorrecto. Intenta nuevamente.', 'error');
+    }
+    
+    // Recalcular cotización si existe
+    if (typeof calculateQuote === 'function') {
+        setTimeout(calculateQuote, 100);
+    }
+    
+    return isValid;
+}
+
+// Hacer disponible globalmente
+window.validateMemberCode = validateMemberCode;
 
 // Añadir estilos CSS para las animaciones y mensajes
 const style = document.createElement('style');
